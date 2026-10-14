@@ -1,4 +1,4 @@
-.question-screen {
+.pick {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -12,24 +12,13 @@
   animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.question-screen__ornament {
+.pick__ornament {
   width: 200px;
   color: var(--color-gold);
   opacity: 0.85;
 }
 
-.question-screen__text {
+.pick__text {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: clamp(1.5rem, 1rem + 2vw, 2.3rem);
@@ -40,7 +29,7 @@
   color: var(--color-paper);
 }
 
-.question-screen__options {
+.pick__options {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -72,53 +61,14 @@
   transform: translateY(-1px);
 }
 
-.question-screen__nav {
+.pick__nav {
   display: flex;
   gap: 14px;
   margin-top: 4px;
 }
 
-.primary-button,
-.ghost-button {
-  font-size: 1rem;
-  padding: 12px 30px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
-}
-
-.primary-button {
-  background: linear-gradient(180deg, var(--color-gold-bright) 0%, var(--color-gold) 100%);
-  color: var(--color-ink);
-  font-weight: 700;
-}
-
-.primary-button:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.primary-button:not(:disabled):hover {
-  transform: translateY(-1px);
-}
-
-.ghost-button {
-  background: transparent;
-  border-color: rgba(243, 233, 210, 0.3);
-  color: var(--color-paper-alt);
-}
-
-.ghost-button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.ghost-button:not(:disabled):hover {
-  border-color: var(--color-paper-alt);
-}
-
 @media (max-width: 480px) {
-  .question-screen {
+  .pick {
     gap: 20px;
     padding: 32px 16px;
   }
@@ -127,4 +77,31 @@
     padding: 10px 16px;
     font-size: 0.95rem;
   }
+}
+
+.word-tile--dim {
+  opacity: 0.45;
+}
+
+.pick__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.pick__count {
+  font-size: 0.85rem;
+  color: var(--color-paper-alt);
+  opacity: 0.7;
+}
+
+.pick__error {
+  color: #e8a0a0;
+  margin: 0;
+}
+
+.pick__reset {
+  margin-top: -12px;
 }

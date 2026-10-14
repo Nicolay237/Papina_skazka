@@ -9,17 +9,6 @@
   animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .story-page__book {
   position: relative;
   max-width: 620px;
@@ -85,4 +74,52 @@
   .story-page__dropcap {
     font-size: 2.8rem;
   }
+}
+
+.story-page__picks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 620px;
+  width: 100%;
+}
+
+.story-page__picks-toggle {
+  background: none;
+  border: none;
+  padding: 4px 0;
+  font-size: 0.95rem;
+  color: var(--color-gold-bright);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.story-page__picks-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin: 0;
+}
+
+.story-page__pick {
+  padding: 10px 14px;
+  border: 1px solid rgba(201, 162, 75, 0.3);
+  border-radius: var(--radius-tile);
+  background: rgba(243, 233, 210, 0.04);
+}
+
+.story-page__pick dt {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 4px;
+}
+
+.story-page__pick dd {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.4;
 }

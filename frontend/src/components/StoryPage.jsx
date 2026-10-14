@@ -2,16 +2,16 @@ import { useState } from "react";
 import Ornament from "./Ornament";
 import "./StoryPage.css";
 
-export default function StoryPage({ story, onRestart }) {
+export default function StoryPage({ result, onAgain, onSettings }) {
   const [copied, setCopied] = useState(false);
-  const paragraphs = story.split("\n\n").filter(Boolean);
-  const [firstParagraph, ...restParagraphs] = paragraphs;
+  const [showPicks, setShowPicks] = useState(false);
+  const [firstParagraph, ...restParagraphs] = result.paragraphs;
   const firstLetter = firstParagraph?.[0] ?? "";
   const restOfFirst = firstParagraph?.slice(1) ?? "";
 
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(story);
+      await navigator.clipboard.writeText(result.story);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -20,7 +20,7 @@ export default function StoryPage({ story, onRestart }) {
   }
 
   function handleDownload() {
-    const blob = new Blob([story], { type: "text/plain;charset=utf-8" });
+    const blob = new Blob([result.story], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -46,15 +46,39 @@ export default function StoryPage({ story, onRestart }) {
       </div>
 
       <div className="story-page__actions">
+        <button type="button" className="primary-button" onClick={onAgain}>
+          Ещё одну!
+        </button>
+        <button type="button" className="ghost-button" onClick={onSettings}>
+          Изменить темы
+        </button>
         <button type="button" className="ghost-button" onClick={handleCopy}>
-          {copied ? "Скопировано" : "Скопировать текст"}
+          {copied ? "Скопировано" : "Скопировать"}
         </button>
         <button type="button" className="ghost-button" onClick={handleDownload}>
           Скачать .txt
         </button>
-        <button type="button" className="primary-button" onClick={onRestart}>
-          Ещё одну!
+      </div>
+
+      <div className="story-page__picks">
+        <button
+          type="button"
+          className="story-page__picks-toggle"
+          onClick={() => setShowPicks((v) => !v)}
+          aria-expanded={showPicks}
+        >
+          {showPicks ? "Спрятать, из чего сложилась сказка" : "Из чего сложилась сказка"}
         </button>
+        {showPicks && (
+          <dl className="story-page__picks-list">
+            {result.picks.map((pick) => (
+              <div key={pick.slot} className="story-page__pick">
+                <dt>{pick.title}</dt>
+                <dd>{pick.label}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
       </div>
     </div>
   );

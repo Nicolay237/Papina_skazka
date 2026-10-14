@@ -59,6 +59,56 @@ button {
   outline-offset: 3px;
 }
 
+.primary-button,
+.ghost-button {
+  font-size: 1rem;
+  padding: 12px 30px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.primary-button {
+  background: linear-gradient(180deg, var(--color-gold-bright) 0%, var(--color-gold) 100%);
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.primary-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.primary-button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+.ghost-button {
+  background: transparent;
+  border-color: rgba(243, 233, 210, 0.3);
+  color: var(--color-paper-alt);
+}
+
+.ghost-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.ghost-button:not(:disabled):hover {
+  border-color: var(--color-paper-alt);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
