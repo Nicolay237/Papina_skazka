@@ -1,5 +1,3 @@
-fastapi
-uvicorn[standard]
-pydantic
-pymorphy3
-pymorphy3-dicts-ru
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.7
