@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 class ThemeOut(BaseModel):
     id: str
     name: str
-    emoji: str
+    icon: str = Field(description="Имя иконки Material Symbols")
     description: str
     size: int = Field(description="Сколько фраз доступно, если выбрана только эта тема")
 

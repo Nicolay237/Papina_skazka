@@ -1,26 +1,6 @@
-:root {
-  --color-bg: #1b2430;
-  --color-bg-deep: #12181f;
-  --color-vignette: #0c1015;
-  --color-paper: #f3e9d2;
-  --color-paper-alt: #eaddb8;
-  --color-gold: #c9a24b;
-  --color-gold-bright: #e6c778;
-  --color-red: #8c2f2f;
-  --color-red-bright: #a83c3c;
-  --color-ink: #241a12;
-  --color-ink-soft: #4a3d2d;
-  --color-forest: #4a5d45;
-  --color-mist: rgba(243, 233, 210, 0.08);
-
-  --font-display: "Yeseva One", "PT Serif", serif;
-  --font-body: "PT Serif", Georgia, serif;
-
-  --radius-tile: 10px;
-  --radius-card: 18px;
-
-  color-scheme: dark;
-}
+@import "./styles/tokens.css";
+@import "./styles/components.css";
+@import "./styles/screens.css";
 
 * {
   box-sizing: border-box;
@@ -35,11 +15,12 @@ body {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(ellipse 120% 80% at 50% -10%, #2a3548 0%, transparent 60%),
-    radial-gradient(ellipse 100% 60% at 85% 110%, #23140f 0%, transparent 55%),
-    linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-deep) 60%, var(--color-vignette) 100%);
-  font-family: var(--font-body);
-  color: var(--color-paper);
+    radial-gradient(ellipse 120% 70% at 50% -10%, #223044 0%, transparent 60%),
+    radial-gradient(ellipse 90% 50% at 90% 110%, #2a1712 0%, transparent 55%),
+    var(--md-sys-color-surface);
+  background-attachment: fixed;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-ref-typeface-plain);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -51,62 +32,6 @@ body {
 
 button {
   font-family: inherit;
-  cursor: pointer;
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-gold-bright);
-  outline-offset: 3px;
-}
-
-.primary-button,
-.ghost-button {
-  font-size: 1rem;
-  padding: 12px 30px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
-}
-
-.primary-button {
-  background: linear-gradient(180deg, var(--color-gold-bright) 0%, var(--color-gold) 100%);
-  color: var(--color-ink);
-  font-weight: 700;
-}
-
-.primary-button:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.primary-button:not(:disabled):hover {
-  transform: translateY(-1px);
-}
-
-.ghost-button {
-  background: transparent;
-  border-color: rgba(243, 233, 210, 0.3);
-  color: var(--color-paper-alt);
-}
-
-.ghost-button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.ghost-button:not(:disabled):hover {
-  border-color: var(--color-paper-alt);
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -114,6 +39,7 @@ button {
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
 }

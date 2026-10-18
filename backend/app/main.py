@@ -56,7 +56,7 @@ def meta() -> MetaResponse:
         total=sum(len(v) for v in store.load_all().values()),
         themes=[
             ThemeOut(
-                id=t.id, name=t.name, emoji=t.emoji, description=t.description,
+                id=t.id, name=t.name, icon=t.icon, description=t.description,
                 size=sum(sizes[sid][t.id] for sid in sizes),
             )
             for t in THEMES
