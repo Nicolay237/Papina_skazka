@@ -1,5 +1,4 @@
-import Ornament from "./Ornament";
-import "./SetupScreen.css";
+import Icon from "./Icon";
 
 export default function SetupScreen({
   meta,
@@ -24,44 +23,47 @@ export default function SetupScreen({
   }
 
   return (
-    <div className="setup">
-      <header className="setup__header">
-        <p className="setup__eyebrow">Папина сказка</p>
-        <h1 className="setup__title">Какую сказку сочиним?</h1>
-        <Ornament className="setup__ornament" />
-        <p className="setup__lead">
-          Выберите, о чём будет сказка, и что в неё войдёт. Слова выпадут
-          случайно из копилки в {meta.total.toLocaleString("ru-RU")} фраз — или выберите
-          каждое сами.
+    <section className="screen setup">
+      <header className="setup__hero">
+        <h1 className="md-display-small">Какую сказку сочиним?</h1>
+        <p className="md-body-large setup__lead">
+          Выберите темы и части сказки. Слова выпадут случайно из копилки
+          в {meta.total.toLocaleString("ru-RU")} фраз — или выберите каждое сами.
         </p>
       </header>
 
       <section className="setup__section" aria-labelledby="themes-title">
-        <div className="setup__section-head">
-          <h2 id="themes-title" className="setup__section-title">О чём сказка</h2>
+        <div className="section-head">
+          <h2 id="themes-title" className="md-title-large">Темы</h2>
           <button
             type="button"
-            className={`setup__link${allThemes ? " setup__link--on" : ""}`}
+            className={`md-chip md-state${allThemes ? " md-chip--selected" : ""}`}
             onClick={() => onThemesChange([])}
             aria-pressed={allThemes}
           >
-            {allThemes ? "Все темы сразу ✓" : "Выбрать все темы"}
+            {allThemes && <Icon name="check" />}
+            Все темы
           </button>
         </div>
-        <div className="setup__themes">
+        <div className="theme-grid">
           {meta.themes.map((theme) => {
-            const active = themes.includes(theme.id);
+            const selected = themes.includes(theme.id);
             return (
               <button
                 key={theme.id}
                 type="button"
-                className={`theme-card${active ? " theme-card--active" : ""}`}
+                className={`md-card md-card--outlined theme-card md-state${selected ? " theme-card--selected" : ""}`}
                 onClick={() => toggleTheme(theme.id)}
-                aria-pressed={active}
+                aria-pressed={selected}
               >
-                <span className="theme-card__emoji" aria-hidden="true">{theme.emoji}</span>
-                <span className="theme-card__name">{theme.name}</span>
-                <span className="theme-card__desc">{theme.description}</span>
+                <span className="theme-card__icon">
+                  <Icon name={theme.icon} filled={selected} />
+                </span>
+                <span className="theme-card__text">
+                  <span className="md-title-medium">{theme.name}</span>
+                  <span className="md-body-medium theme-card__desc">{theme.description}</span>
+                </span>
+                {selected && <Icon name="check" className="theme-card__check" />}
               </button>
             );
           })}
@@ -69,14 +71,14 @@ export default function SetupScreen({
       </section>
 
       <section className="setup__section" aria-labelledby="parts-title">
-        <div className="setup__section-head">
-          <h2 id="parts-title" className="setup__section-title">Что войдёт в сказку</h2>
+        <div className="section-head">
+          <h2 id="parts-title" className="md-title-large">Что войдёт в сказку</h2>
         </div>
-        <div className="setup__groups">
+        <div className="parts-grid">
           {meta.groups.map((group) => (
             <div key={group.id} className="parts-group">
-              <h3 className="parts-group__title">{group.title}</h3>
-              <div className="parts-group__chips">
+              <h3 className="md-label-large parts-group__title">{group.title}</h3>
+              <div className="md-chip-set">
                 {meta.slots
                   .filter((s) => s.group === group.id)
                   .map((slot) => {
@@ -85,13 +87,13 @@ export default function SetupScreen({
                       <button
                         key={slot.id}
                         type="button"
-                        className={`part-chip${on ? " part-chip--on" : ""}`}
-                        onClick={() => !slot.required && toggleSlot(slot.id)}
+                        className={`md-chip md-state${on ? " md-chip--selected" : ""}`}
+                        onClick={() => toggleSlot(slot.id)}
                         aria-pressed={on}
                         disabled={slot.required}
                         title={slot.required ? "Без этого сказки не бывает" : undefined}
                       >
-                        <span className="part-chip__mark" aria-hidden="true">{on ? "✓" : ""}</span>
+                        {on && <Icon name="check" />}
                         {slot.title}
                       </button>
                     );
@@ -103,13 +105,15 @@ export default function SetupScreen({
       </section>
 
       <div className="setup__actions">
-        <button type="button" className="primary-button" onClick={onRandom}>
+        <button type="button" className="md-button md-button--filled md-button--large md-state" onClick={onRandom}>
+          <Icon name="auto_awesome" />
           Собери мне сказку
         </button>
-        <button type="button" className="ghost-button" onClick={onPick}>
+        <button type="button" className="md-button md-button--tonal md-button--large md-state" onClick={onPick}>
+          <Icon name="touch_app" />
           Выберу сам
         </button>
       </div>
-    </div>
+    </section>
   );
 }

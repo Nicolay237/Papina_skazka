@@ -5,7 +5,7 @@ import PickScreen from "./components/PickScreen";
 import LoadingScreen from "./components/LoadingScreen";
 import ErrorScreen from "./components/ErrorScreen";
 import StoryPage from "./components/StoryPage";
-import "./App.css";
+import TopAppBar from "./components/TopAppBar";
 
 const STAGE = {
   LOADING_META: "loading-meta",
@@ -89,23 +89,27 @@ export default function App() {
     generate(manual);
   }
 
-  if (stage === STAGE.LOADING_META || stage === STAGE.GENERATING) {
-    return <LoadingScreen />;
-  }
+  const goBackFromPick = () =>
+    pickIndex === 0 ? setStage(STAGE.SETUP) : setPickIndex(pickIndex - 1);
 
-  if (stage === STAGE.ERROR) {
-    return (
+  let screen;
+  let onBack = null;
+
+  if (stage === STAGE.LOADING_META || stage === STAGE.GENERATING) {
+    screen = <LoadingScreen />;
+  } else if (stage === STAGE.ERROR) {
+    screen = (
       <ErrorScreen
         message={error.message}
         onRetry={() => (error.answers === null ? loadMeta() : generate(error.answers))}
       />
     );
-  }
-
-  if (stage === STAGE.PICK) {
+    if (meta) onBack = () => setStage(STAGE.SETUP);
+  } else if (stage === STAGE.PICK) {
     const slot = activeSlots[pickIndex];
     const isLast = pickIndex === activeSlots.length - 1;
-    return (
+    onBack = goBackFromPick;
+    screen = (
       <PickScreen
         key={slot.id}
         slot={slot}
@@ -120,32 +124,38 @@ export default function App() {
             return rest;
           })
         }
-        onBack={() => (pickIndex === 0 ? setStage(STAGE.SETUP) : setPickIndex(pickIndex - 1))}
+        onBack={goBackFromPick}
         onNext={() => (isLast ? finishPicking() : setPickIndex(pickIndex + 1))}
         isLast={isLast}
       />
     );
-  }
-
-  if (stage === STAGE.STORY) {
-    return (
+  } else if (stage === STAGE.STORY) {
+    onBack = () => setStage(STAGE.SETUP);
+    screen = (
       <StoryPage
         result={result}
         onAgain={() => generate({})}
         onSettings={() => setStage(STAGE.SETUP)}
       />
     );
+  } else {
+    screen = (
+      <SetupScreen
+        meta={meta}
+        themes={themes}
+        onThemesChange={setThemes}
+        optionalSlots={optionalSlots}
+        onOptionalSlotsChange={setOptionalSlots}
+        onRandom={() => generate({})}
+        onPick={startPicking}
+      />
+    );
   }
 
   return (
-    <SetupScreen
-      meta={meta}
-      themes={themes}
-      onThemesChange={setThemes}
-      optionalSlots={optionalSlots}
-      onOptionalSlotsChange={setOptionalSlots}
-      onRandom={() => generate({})}
-      onPick={startPicking}
-    />
+    <>
+      <TopAppBar title="Папина сказка" onBack={onBack} />
+      <main className="app-main">{screen}</main>
+    </>
   );
 }

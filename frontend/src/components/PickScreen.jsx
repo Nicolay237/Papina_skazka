@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getOptions } from "../api";
-import Ornament from "./Ornament";
-import ProgressRail from "./ProgressRail";
-import "./PickScreen.css";
+import Icon from "./Icon";
 
 export default function PickScreen({
   slot,
@@ -20,7 +18,7 @@ export default function PickScreen({
   const [totalInPool, setTotalInPool] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [round, setRound] = useState(0); // растёт при каждом «Перемешать»
+  const [round, setRound] = useState(0); // растёт при каждом «Показать другие»
   const seen = useRef([]);
 
   useEffect(() => {
@@ -45,28 +43,50 @@ export default function PickScreen({
     setRound((r) => r + 1);
   }
 
-  // выбранная плитка не пропадает после «Перемешать»
+  // выбранный вариант не пропадает после «Показать другие»
   const shown =
     selected && !options.some((o) => o.text === selected.text) ? [selected, ...options] : options;
+  const percent = Math.round((index / total) * 100);
 
   return (
-    <div className="pick">
-      <Ornament className="pick__ornament" />
+    <section className="screen pick">
+      <div className="pick__progress">
+        <span className="md-label-large pick__step">
+          Шаг {index} из {total} · {slot.title}
+        </span>
+        <div
+          className="md-linear-progress"
+          role="progressbar"
+          aria-valuenow={index}
+          aria-valuemin={1}
+          aria-valuemax={total}
+          aria-label="Прогресс"
+        >
+          <div className="md-linear-progress__bar" style={{ width: `${percent}%` }} />
+        </div>
+      </div>
 
-      <h1 className="pick__text">{slot.question}</h1>
+      <h1 className="md-headline-medium pick__question">{slot.question}</h1>
 
-      <div className="pick__options" aria-busy={loading}>
-        {error && <p className="pick__error">Не удалось получить варианты: {error}</p>}
+      {error && (
+        <p className="md-body-medium pick__error">
+          <Icon name="error" className="md-icon--small" />
+          Не удалось получить варианты: {error}
+        </p>
+      )}
+
+      <div className={`md-chip-set pick__options${loading ? " pick__options--loading" : ""}`} aria-busy={loading}>
         {shown.map((option) => {
           const active = selected?.text === option.text;
           return (
             <button
               key={option.text}
               type="button"
-              className={`word-tile${active ? " word-tile--active" : ""}${loading ? " word-tile--dim" : ""}`}
-              onClick={() => onSelect(option)}
+              className={`md-chip md-chip--phrase md-state${active ? " md-chip--selected" : ""}`}
+              onClick={() => (active ? onClear() : onSelect(option))}
               aria-pressed={active}
             >
+              {active && <Icon name="check" />}
               {option.label}
             </button>
           );
@@ -74,33 +94,32 @@ export default function PickScreen({
       </div>
 
       <div className="pick__tools">
-        <button type="button" className="ghost-button" onClick={reshuffle} disabled={loading}>
-          ↻ Показать другие
+        <button type="button" className="md-button md-button--text md-state" onClick={reshuffle} disabled={loading}>
+          <Icon name="refresh" />
+          Показать другие
         </button>
-        {totalInPool > 0 && <span className="pick__count">всего вариантов: {totalInPool}</span>}
+        {totalInPool > 0 && (
+          <span className="md-body-small pick__count">Всего вариантов: {totalInPool}</span>
+        )}
       </div>
 
-      <div className="pick__nav">
-        <button type="button" className="ghost-button" onClick={onBack}>
+      <footer className="pick__nav">
+        <button type="button" className="md-button md-button--text md-state" onClick={onBack}>
+          <Icon name="arrow_back" />
           Назад
         </button>
         {selected ? (
-          <button type="button" className="primary-button" onClick={onNext}>
+          <button type="button" className="md-button md-button--filled md-state" onClick={onNext}>
             {isLast ? "Дописать сказку" : "Дальше"}
+            <Icon name={isLast ? "auto_stories" : "arrow_forward"} />
           </button>
         ) : (
-          <button type="button" className="primary-button" onClick={onNext}>
+          <button type="button" className="md-button md-button--tonal md-state" onClick={onNext}>
+            <Icon name="casino" />
             Пусть решит случай
           </button>
         )}
-      </div>
-      {selected && (
-        <button type="button" className="setup__link pick__reset" onClick={onClear}>
-          Снять выбор — пусть решит случай
-        </button>
-      )}
-
-      <ProgressRail current={index} total={total} />
-    </div>
+      </footer>
+    </section>
   );
 }
