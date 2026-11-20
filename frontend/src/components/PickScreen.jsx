@@ -15,7 +15,6 @@ export default function PickScreen({
   isLast,
 }) {
   const [options, setOptions] = useState([]);
-  const [totalInPool, setTotalInPool] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [round, setRound] = useState(0); // растёт при каждом «Показать другие»
@@ -27,7 +26,6 @@ export default function PickScreen({
       .then((data) => {
         if (cancelled) return;
         setOptions(data.options);
-        setTotalInPool(data.total);
         seen.current = [...seen.current, ...data.options.map((o) => o.text)].slice(-200);
       })
       .catch((err) => !cancelled && setError(err.message))
@@ -52,7 +50,7 @@ export default function PickScreen({
     <section className="screen pick">
       <div className="pick__progress">
         <span className="md-label-large pick__step">
-          Шаг {index} из {total} · {slot.title}
+          Шаг {index} из {total}
         </span>
         <div
           className="md-linear-progress"
@@ -70,7 +68,6 @@ export default function PickScreen({
 
       {error && (
         <p className="md-body-medium pick__error">
-          <Icon name="error" className="md-icon--small" />
           Не удалось получить варианты: {error}
         </p>
       )}
@@ -95,27 +92,20 @@ export default function PickScreen({
 
       <div className="pick__tools">
         <button type="button" className="md-button md-button--text md-state" onClick={reshuffle} disabled={loading}>
-          <Icon name="refresh" />
           Показать другие
         </button>
-        {totalInPool > 0 && (
-          <span className="md-body-small pick__count">Всего вариантов: {totalInPool}</span>
-        )}
       </div>
 
       <footer className="pick__nav">
         <button type="button" className="md-button md-button--text md-state" onClick={onBack}>
-          <Icon name="arrow_back" />
           Назад
         </button>
         {selected ? (
           <button type="button" className="md-button md-button--filled md-state" onClick={onNext}>
             {isLast ? "Дописать сказку" : "Дальше"}
-            <Icon name={isLast ? "auto_stories" : "arrow_forward"} />
           </button>
         ) : (
           <button type="button" className="md-button md-button--tonal md-state" onClick={onNext}>
-            <Icon name="casino" />
             Пусть решит случай
           </button>
         )}

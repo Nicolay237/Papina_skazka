@@ -27,8 +27,7 @@ export default function SetupScreen({
       <header className="setup__hero">
         <h1 className="md-display-small">Какую сказку сочиним?</h1>
         <p className="md-body-large setup__lead">
-          Выберите темы и части сказки. Слова выпадут случайно из копилки
-          в {meta.total.toLocaleString("ru-RU")} фраз — или выберите каждое сами.
+          В копилке {meta.total.toLocaleString("ru-RU")} фраз.
         </p>
       </header>
 
@@ -56,12 +55,11 @@ export default function SetupScreen({
                 onClick={() => toggleTheme(theme.id)}
                 aria-pressed={selected}
               >
-                <span className="theme-card__icon">
-                  <Icon name={theme.icon} filled={selected} />
-                </span>
                 <span className="theme-card__text">
                   <span className="md-title-medium">{theme.name}</span>
-                  <span className="md-body-medium theme-card__desc">{theme.description}</span>
+                  {theme.description && (
+                    <span className="md-body-medium theme-card__desc">{theme.description}</span>
+                  )}
                 </span>
                 {selected && <Icon name="check" className="theme-card__check" />}
               </button>
@@ -106,11 +104,9 @@ export default function SetupScreen({
 
       <div className="setup__actions">
         <button type="button" className="md-button md-button--filled md-button--large md-state" onClick={onRandom}>
-          <Icon name="auto_awesome" />
           Собери мне сказку
         </button>
         <button type="button" className="md-button md-button--tonal md-button--large md-state" onClick={onPick}>
-          <Icon name="touch_app" />
           Выберу сам
         </button>
       </div>

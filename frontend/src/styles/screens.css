@@ -15,7 +15,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  animation: screen-in var(--md-sys-motion-duration-long) var(--md-sys-motion-easing-emphasized-decelerate);
+  animation: screen-in var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-emphasized-decelerate);
 }
 
 .screen--center {
@@ -23,11 +23,11 @@
   justify-content: center;
   gap: 16px;
   text-align: center;
-  padding-bottom: 96px;
+  padding-bottom: 64px;
 }
 
 @keyframes screen-in {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -39,16 +39,6 @@
 
 .screen--center h1 {
   margin: 0;
-}
-
-.error-badge {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: var(--md-sys-shape-corner-large);
-  background: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
 }
 
 .section-head {
@@ -101,18 +91,6 @@
   transition: background var(--md-sys-motion-duration-short) linear;
 }
 
-.theme-card__icon {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--md-sys-shape-corner-medium);
-  background: var(--md-sys-color-surface-container-highest);
-  color: var(--md-sys-color-primary);
-  transition: background var(--md-sys-motion-duration-short) linear;
-}
-
 .theme-card__text {
   display: flex;
   flex-direction: column;
@@ -133,11 +111,6 @@
   background: var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
   box-shadow: none;
-}
-
-.theme-card--selected .theme-card__icon {
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
 }
 
 .theme-card--selected .theme-card__desc {
@@ -208,10 +181,6 @@
   align-items: center;
   gap: 8px 16px;
   margin-left: -12px;
-}
-
-.pick__count {
-  color: var(--md-sys-color-on-surface-variant);
 }
 
 .pick__nav {
@@ -296,7 +265,7 @@
 
 .story__chevron {
   color: var(--md-sys-color-on-surface-variant);
-  transition: transform var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
+  transition: transform var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
 }
 
 .story__chevron--open {

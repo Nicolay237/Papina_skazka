@@ -26,11 +26,6 @@
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
-.md-icon--small {
-  font-size: 18px;
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
-}
-
 /* ---------- слой состояний: hover / focus / pressed ---------- */
 .md-state {
   position: relative;
@@ -76,7 +71,6 @@
   letter-spacing: 0.1px;
   cursor: pointer;
   white-space: nowrap;
-  transition: box-shadow var(--md-sys-motion-duration-short) linear;
 }
 
 .md-button:has(> .md-icon:first-child) { padding-left: 16px; }
@@ -87,13 +81,11 @@
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
 }
-.md-button--filled:hover { box-shadow: var(--md-sys-elevation-1); }
 
 .md-button--tonal {
   background: var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
 }
-.md-button--tonal:hover { box-shadow: var(--md-sys-elevation-1); }
 
 .md-button--outlined {
   background: transparent;
@@ -255,7 +247,7 @@
   height: 100%;
   border-radius: inherit;
   background: var(--md-sys-color-primary);
-  transition: width var(--md-sys-motion-duration-long) var(--md-sys-motion-easing-standard);
+  transition: width var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
 }
 
 .md-circular-progress {
@@ -321,10 +313,6 @@
   gap: 16px;
   min-height: 72px;
   padding: 8px 24px 8px 16px;
-}
-
-.md-list-item__icon {
-  color: var(--md-sys-color-on-surface-variant);
 }
 
 .md-list-item__overline {

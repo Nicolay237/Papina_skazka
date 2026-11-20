@@ -17,8 +17,7 @@ ANY_THEME = "any"
 class Theme:
     id: str
     name: str
-    icon: str  # имя иконки Material Symbols
-    description: str
+    description: str = ""  # только если названия темы мало
 
 
 @dataclass(frozen=True)
@@ -38,16 +37,16 @@ class Slot:
 
 
 THEMES: list[Theme] = [
-    Theme("fairy", "Сказочные", "castle", "Баба-яга, Колобок, богатыри и тридевятое царство"),
-    Theme("cartoon", "Мультики", "animated_images", "Чебурашка, Винни-Пух, Простоквашино и Фиксики"),
-    Theme("movie", "Кино и супергерои", "movie", "Бэтмен, Гарри Поттер, Шерлок Холмс и Йода"),
-    Theme("space", "Космос и наука", "rocket_launch", "Ракеты, инопланетяне, роботы и безумные учёные"),
-    Theme("quest", "Приключения и пираты", "sailing", "Клады, острова, джунгли и морские волки"),
-    Theme("home", "Дом и семья", "home", "Бабушкины пирожки, папин диван и вредный кот"),
-    Theme("school", "Школа", "school", "Контрольные, перемены, портфели и завуч"),
-    Theme("sport", "Спорт", "sports_soccer", "Матчи, рекорды, тренеры и болельщики"),
-    Theme("spooky", "Страшилки", "skull", "Привидения, вампиры и монстры из-под кровати"),
-    Theme("nonsense", "Чепуха", "cyclone", "Говорящая картошка, летающий пельмень и прочий абсурд"),
+    Theme("fairy", "Сказочные"),
+    Theme("cartoon", "Мультики"),
+    Theme("movie", "Кино и супергерои"),
+    Theme("space", "Космос и наука"),
+    Theme("quest", "Приключения и пираты"),
+    Theme("home", "Дом и семья"),
+    Theme("school", "Школа"),
+    Theme("sport", "Спорт"),
+    Theme("spooky", "Страшилки"),
+    Theme("nonsense", "Чепуха", "Говорящая картошка, летающий пельмень и прочий абсурд"),
 ]
 
 GROUPS: list[Group] = [

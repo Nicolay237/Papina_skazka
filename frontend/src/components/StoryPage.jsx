@@ -2,16 +2,6 @@ import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import Ornament from "./Ornament";
 
-const SLOT_ICONS = {
-  kto: "person",
-  s_kem: "group",
-  gde: "place",
-  kogda: "schedule",
-  chto_delali: "directions_run",
-  lyudi_skazali: "forum",
-  delo_konchilos: "flag",
-};
-
 export default function StoryPage({ result, onAgain, onSettings }) {
   const [snackbar, setSnackbar] = useState("");
   const [showPicks, setShowPicks] = useState(false);
@@ -95,7 +85,6 @@ export default function StoryPage({ result, onAgain, onSettings }) {
             <ul className="md-list">
               {result.picks.map((pick) => (
                 <li key={pick.slot} className="md-list-item">
-                  <Icon name={SLOT_ICONS[pick.slot] ?? "auto_stories"} className="md-list-item__icon" />
                   <span>
                     <span className="md-list-item__overline">{pick.title}</span>
                     <span className="md-list-item__headline">{pick.label}</span>

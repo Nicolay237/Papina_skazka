@@ -4,7 +4,7 @@ export default function LoadingScreen() {
       <svg className="md-circular-progress" viewBox="0 0 48 48" aria-hidden="true">
         <circle cx="24" cy="24" r="20" />
       </svg>
-      <p className="md-body-large status-text">Сказка сплетается из слов…</p>
+      <p className="md-body-large status-text">Собираем сказку…</p>
     </section>
   );
 }
