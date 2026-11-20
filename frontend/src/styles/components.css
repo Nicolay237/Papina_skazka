@@ -201,84 +201,110 @@
   box-shadow: var(--md-sys-elevation-1);
 }
 
-/* ---------- верхняя панель и вкладки ---------- */
+/* ---------- верхняя панель ---------- */
 .app-header {
   position: sticky;
   top: 0;
   z-index: 10;
   background: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface);
-  transition: background var(--md-sys-motion-duration-short) linear;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--md-sys-motion-duration-short) linear;
 }
 
+/* при прокрутке фон не меняется, появляется только тонкая линия */
 .app-header--scrolled {
-  background: var(--md-sys-color-surface-container);
+  border-bottom-color: var(--md-sys-color-outline-variant);
 }
 
 .md-top-app-bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-areas: "title nav actions";
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   max-width: 880px;
-  height: 64px;
+  min-height: 64px;
   margin: 0 auto;
   padding: 0 16px 0 24px;
 }
 
 .md-top-app-bar__title {
-  flex: 1;
+  grid-area: title;
   margin: 0;
   font: 400 22px/28px var(--md-ref-typeface-brand);
   color: var(--md-sys-color-primary);
   white-space: nowrap;
 }
 
-.md-tabs {
-  display: flex;
-  max-width: 880px;
-  margin: 0 auto;
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+.md-top-app-bar__nav {
+  grid-area: nav;
 }
 
-.md-tab {
+.md-top-app-bar__actions {
+  grid-area: actions;
+  justify-self: end;
+}
+
+@media (max-width: 719px) {
+  .md-top-app-bar {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "title actions"
+      "nav nav";
+    row-gap: 4px;
+    padding: 8px 12px 12px 16px;
+  }
+
+  .md-top-app-bar__nav {
+    justify-self: stretch;
+  }
+}
+
+/* ---------- сегментированные кнопки ---------- */
+.md-segmented {
+  display: flex;
+  height: 40px;
+  border-radius: var(--md-sys-shape-corner-full);
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-outline);
+}
+
+.md-segment {
   flex: 1;
-  display: grid;
-  place-items: center;
-  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 128px;
   padding: 0 16px;
   border: none;
   background: transparent;
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--md-sys-color-on-surface);
   font: 500 14px/20px var(--md-ref-typeface-plain);
   letter-spacing: 0.1px;
   cursor: pointer;
+  transition: background var(--md-sys-motion-duration-short) linear;
 }
 
-.md-tab--active {
-  color: var(--md-sys-color-primary);
+.md-segment:first-child {
+  border-radius: var(--md-sys-shape-corner-full) 0 0 var(--md-sys-shape-corner-full);
 }
 
-.md-tab__label {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  height: 48px;
+.md-segment:last-child {
+  border-radius: 0 var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-full) 0;
 }
 
-.md-tab__indicator {
-  position: absolute;
-  left: 2px;
-  right: 2px;
-  bottom: 0;
-  height: 3px;
-  border-radius: 3px 3px 0 0;
-  background: var(--md-sys-color-primary);
-  opacity: 0;
-  transition: opacity var(--md-sys-motion-duration-short) linear;
+.md-segment + .md-segment {
+  box-shadow: inset 1px 0 0 var(--md-sys-color-outline);
 }
 
-.md-tab--active .md-tab__indicator {
-  opacity: 1;
+.md-segment .md-icon {
+  font-size: 18px;
+}
+
+.md-segment--selected {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
 }
 
 /* ---------- переключатель ---------- */
@@ -353,7 +379,6 @@
 @media (max-width: 419px) {
   .kid-switch__label-long { display: none; }
   .kid-switch__label-short { display: inline; }
-  .md-top-app-bar { padding: 0 12px 0 16px; gap: 8px; }
 }
 
 /* ---------- текстовое поле ---------- */

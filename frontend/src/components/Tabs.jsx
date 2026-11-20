@@ -1,4 +1,6 @@
-// Основные вкладки Material 3.
+import Icon from "./Icon";
+
+// Разделы сайта — сегментированные кнопки Material 3 (по смыслу это вкладки).
 export default function Tabs({ tabs, active, onChange }) {
   function onKeyDown(event) {
     const index = tabs.findIndex((t) => t.id === active);
@@ -11,7 +13,7 @@ export default function Tabs({ tabs, active, onChange }) {
   }
 
   return (
-    <div className="md-tabs" role="tablist" onKeyDown={onKeyDown}>
+    <div className="md-segmented" role="tablist" aria-label="Разделы" onKeyDown={onKeyDown}>
       {tabs.map((tab) => {
         const selected = tab.id === active;
         return (
@@ -23,13 +25,11 @@ export default function Tabs({ tabs, active, onChange }) {
             aria-selected={selected}
             aria-controls={`panel-${tab.id}`}
             tabIndex={selected ? 0 : -1}
-            className={`md-tab md-state${selected ? " md-tab--active" : ""}`}
+            className={`md-segment md-state${selected ? " md-segment--selected" : ""}`}
             onClick={() => onChange(tab.id)}
           >
-            <span className="md-tab__label">
-              {tab.label}
-              <span className="md-tab__indicator" />
-            </span>
+            {selected && <Icon name="check" />}
+            {tab.label}
           </button>
         );
       })}

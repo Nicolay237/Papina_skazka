@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import KidSwitch from "./KidSwitch";
 
-export default function TopAppBar({ title, kidMode, onKidModeChange, children }) {
+export default function TopAppBar({ title, kidMode, onKidModeChange, nav }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -14,9 +14,11 @@ export default function TopAppBar({ title, kidMode, onKidModeChange, children })
     <header className={`app-header${scrolled ? " app-header--scrolled" : ""}`}>
       <div className="md-top-app-bar">
         <p className="md-top-app-bar__title">{title}</p>
-        <KidSwitch checked={kidMode} onChange={onKidModeChange} />
+        <nav className="md-top-app-bar__nav">{nav}</nav>
+        <div className="md-top-app-bar__actions">
+          <KidSwitch checked={kidMode} onChange={onKidModeChange} />
+        </div>
       </div>
-      {children}
     </header>
   );
 }

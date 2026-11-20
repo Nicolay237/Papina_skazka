@@ -89,9 +89,12 @@ export default function App() {
 
   return (
     <>
-      <TopAppBar title="Папина сказка" kidMode={kidMode} onKidModeChange={changeKidMode}>
-        <Tabs tabs={TABS} active={tab} onChange={changeTab} />
-      </TopAppBar>
+      <TopAppBar
+        title="Папина сказка"
+        kidMode={kidMode}
+        onKidModeChange={changeKidMode}
+        nav={<Tabs tabs={TABS} active={tab} onChange={changeTab} />}
+      />
       <main className="app-main">{content}</main>
       {snackbar && (
         <div key={snackbar.id} className="md-snackbar" role="status">
