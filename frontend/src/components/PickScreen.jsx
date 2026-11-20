@@ -2,17 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import { getOptions } from "../api";
 import Icon from "./Icon";
 
+/**
+ * Выбор одной фразы для части сказки.
+ * onBack не передан — кнопки «Назад» нет (в «Чепухе» возвращаться к чужим ответам нельзя).
+ */
 export default function PickScreen({
   slot,
   themes,
+  kid,
   index,
   total,
+  stepLabel,
   selected,
   onSelect,
   onClear,
   onBack,
   onNext,
-  isLast,
+  nextLabel = "Дальше",
 }) {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +28,7 @@ export default function PickScreen({
 
   useEffect(() => {
     let cancelled = false;
-    getOptions({ slot: slot.id, themes, exclude: seen.current })
+    getOptions({ slot: slot.id, themes, kid, exclude: seen.current })
       .then((data) => {
         if (cancelled) return;
         setOptions(data.options);
@@ -33,7 +39,7 @@ export default function PickScreen({
     return () => {
       cancelled = true;
     };
-  }, [slot.id, themes, round]);
+  }, [slot.id, themes, kid, round]);
 
   function reshuffle() {
     setLoading(true);
@@ -49,9 +55,7 @@ export default function PickScreen({
   return (
     <section className="screen pick">
       <div className="pick__progress">
-        <span className="md-label-large pick__step">
-          Шаг {index} из {total}
-        </span>
+        <span className="md-label-large pick__step">{stepLabel ?? `Шаг ${index} из ${total}`}</span>
         <div
           className="md-linear-progress"
           role="progressbar"
@@ -66,11 +70,7 @@ export default function PickScreen({
 
       <h1 className="md-headline-medium pick__question">{slot.question}</h1>
 
-      {error && (
-        <p className="md-body-medium pick__error">
-          Не удалось получить варианты: {error}
-        </p>
-      )}
+      {error && <p className="md-body-medium pick__error">Не удалось получить варианты: {error}</p>}
 
       <div className={`md-chip-set pick__options${loading ? " pick__options--loading" : ""}`} aria-busy={loading}>
         {shown.map((option) => {
@@ -96,13 +96,15 @@ export default function PickScreen({
         </button>
       </div>
 
-      <footer className="pick__nav">
-        <button type="button" className="md-button md-button--text md-state" onClick={onBack}>
-          Назад
-        </button>
+      <footer className={`pick__nav${onBack ? "" : " pick__nav--end"}`}>
+        {onBack && (
+          <button type="button" className="md-button md-button--text md-state" onClick={onBack}>
+            Назад
+          </button>
+        )}
         {selected ? (
           <button type="button" className="md-button md-button--filled md-state" onClick={onNext}>
-            {isLast ? "Дописать сказку" : "Дальше"}
+            {nextLabel}
           </button>
         ) : (
           <button type="button" className="md-button md-button--tonal md-state" onClick={onNext}>

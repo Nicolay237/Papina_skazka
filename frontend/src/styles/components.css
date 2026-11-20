@@ -201,37 +201,221 @@
   box-shadow: var(--md-sys-elevation-1);
 }
 
-/* ---------- верхняя панель ---------- */
-.md-top-app-bar {
+/* ---------- верхняя панель и вкладки ---------- */
+.app-header {
   position: sticky;
   top: 0;
   z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  height: 64px;
-  padding: 0 8px;
   background: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface);
-  transition: background var(--md-sys-motion-duration-medium) linear;
+  transition: background var(--md-sys-motion-duration-short) linear;
 }
 
-.md-top-app-bar--scrolled {
+.app-header--scrolled {
   background: var(--md-sys-color-surface-container);
+}
+
+.md-top-app-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 880px;
+  height: 64px;
+  margin: 0 auto;
+  padding: 0 16px 0 24px;
 }
 
 .md-top-app-bar__title {
   flex: 1;
   margin: 0;
-  text-align: center;
   font: 400 22px/28px var(--md-ref-typeface-brand);
+  color: var(--md-sys-color-primary);
+  white-space: nowrap;
+}
+
+.md-tabs {
+  display: flex;
+  max-width: 880px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.md-tab {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  height: 48px;
+  padding: 0 16px;
+  border: none;
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  font: 500 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.1px;
+  cursor: pointer;
+}
+
+.md-tab--active {
   color: var(--md-sys-color-primary);
 }
 
-.md-top-app-bar__slot {
-  width: 48px;
+.md-tab__label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+}
+
+.md-tab__indicator {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--md-sys-color-primary);
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short) linear;
+}
+
+.md-tab--active .md-tab__indicator {
+  opacity: 1;
+}
+
+/* ---------- переключатель ---------- */
+.md-switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 52px;
+  height: 32px;
+  padding: 0;
+  border: 2px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-highest);
+  cursor: pointer;
+  transition: background var(--md-sys-motion-duration-short) linear,
+    border-color var(--md-sys-motion-duration-short) linear;
+}
+
+.md-switch__handle {
+  position: absolute;
+  top: 50%;
+  left: 2px;
   display: grid;
   place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-outline);
+  color: var(--md-sys-color-surface-container-highest);
+  transform: translateY(-50%);
+  transition: left var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+    background var(--md-sys-motion-duration-short) linear;
+}
+
+.md-switch__handle .md-icon {
+  font-size: 16px;
+}
+
+.md-switch[aria-checked="true"] {
+  border-color: var(--md-sys-color-primary);
+  background: var(--md-sys-color-primary);
+}
+
+.md-switch[aria-checked="true"] .md-switch__handle {
+  left: 22px;
+  background: var(--md-sys-color-on-primary);
+  color: var(--md-sys-color-primary);
+}
+
+.kid-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 4px 4px 12px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font: 500 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.1px;
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  transition: background var(--md-sys-motion-duration-short) linear,
+    color var(--md-sys-motion-duration-short) linear;
+}
+
+.kid-switch--on {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.kid-switch__label-short {
+  display: none;
+}
+
+@media (max-width: 419px) {
+  .kid-switch__label-long { display: none; }
+  .kid-switch__label-short { display: inline; }
+  .md-top-app-bar { padding: 0 12px 0 16px; gap: 8px; }
+}
+
+/* ---------- текстовое поле ---------- */
+.md-text-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.md-text-field__input {
+  width: 100%;
+  height: 56px;
+  padding: 16px 16px 0;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  font: 400 16px/24px var(--md-ref-typeface-plain);
+  letter-spacing: 0.5px;
+  outline: none;
+  transition: border-color var(--md-sys-motion-duration-short) linear;
+}
+
+.md-text-field:has(.md-text-field__trailing) .md-text-field__input {
+  padding-right: 56px;
+}
+
+.md-text-field__input:hover {
+  border-color: var(--md-sys-color-on-surface);
+}
+
+.md-text-field__input:focus {
+  border: 2px solid var(--md-sys-color-primary);
+  padding-left: 15px;
+}
+
+.md-text-field__label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--md-sys-color-on-surface-variant);
+  font: 400 16px/24px var(--md-ref-typeface-plain);
+  pointer-events: none;
+  transition: top var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+    font-size var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
+}
+
+.md-text-field__input:focus + .md-text-field__label,
+.md-text-field__input:not(:placeholder-shown) + .md-text-field__label {
+  top: 14px;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.md-text-field__input:focus + .md-text-field__label {
+  color: var(--md-sys-color-primary);
+}
+
+.md-text-field__trailing {
+  position: absolute;
+  right: 8px;
 }
 
 /* ---------- индикаторы прогресса ---------- */
@@ -313,6 +497,26 @@
   gap: 16px;
   min-height: 72px;
   padding: 8px 24px 8px 16px;
+}
+
+.md-list-item__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.md-list-item__trailing {
+  flex-shrink: 0;
+  font: 500 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.1px;
+  color: var(--md-sys-color-primary);
+}
+
+.md-list-subheader {
+  margin: 8px 0 0;
+  padding: 8px 16px;
+  font: 500 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.1px;
+  color: var(--md-sys-color-primary);
 }
 
 .md-list-item__overline {

@@ -31,8 +31,13 @@ function post(path, body) {
 
 export const getMeta = () => request("/api/meta");
 
-export const getOptions = ({ slot, themes, exclude = [], limit = 12 }) =>
-  post("/api/options", { slot, themes, exclude, limit });
+export const getOptions = ({ slot, themes, kid, exclude = [], limit = 12 }) =>
+  post("/api/options", { slot, themes, kid, exclude, limit });
 
-export const createStory = ({ themes, include, answers = {} }) =>
-  post("/api/story", { themes, include, answers });
+export const createStory = ({ themes, include, answers = {}, kid }) =>
+  post("/api/story", { themes, include, answers, kid });
+
+export const openStory = (code) => request(`/api/story/${encodeURIComponent(code)}`);
+
+export const continueStory = ({ code, themes, include, kid }) =>
+  post("/api/story/continue", { code, themes, include, kid });

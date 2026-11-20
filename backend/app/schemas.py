@@ -27,7 +27,9 @@ class MetaResponse(BaseModel):
     total: int = Field(description="Сколько всего фраз в копилке")
     themes: list[ThemeOut]
     groups: list[GroupOut]
-    slots: list[SlotOut]
+    slots: list[SlotOut] = Field(description="Части сказки в порядке сюжета")
+    chepukha_slots: list[str] = Field(description="Вопросы игры «Чепуха» по порядку")
+    max_chapters: int
 
 
 class OptionOut(BaseModel):
@@ -38,6 +40,7 @@ class OptionOut(BaseModel):
 class OptionsRequest(BaseModel):
     slot: str = Field(max_length=40)
     themes: list[str] = Field(default_factory=list, max_length=20)
+    kid: bool = Field(default=False, description="Детский режим: без фраз с пометкой adult")
     limit: int = Field(default=12, ge=1, le=40)
     exclude: list[str] = Field(default_factory=list, max_length=200)
 
@@ -50,6 +53,7 @@ class OptionsResponse(BaseModel):
 
 class StoryRequest(BaseModel):
     themes: list[str] = Field(default_factory=list, max_length=20)
+    kid: bool = False
     include: list[str] | None = Field(
         default=None,
         max_length=20,
@@ -63,7 +67,15 @@ class StoryRequest(BaseModel):
     )
 
 
+class ContinueRequest(BaseModel):
+    code: str = Field(max_length=400)
+    themes: list[str] = Field(default_factory=list, max_length=20)
+    kid: bool = False
+    include: list[str] | None = Field(default=None, max_length=20)
+
+
 class PickOut(BaseModel):
+    chapter: int
     slot: str
     title: str
     text: str
@@ -71,6 +83,8 @@ class PickOut(BaseModel):
 
 
 class StoryResponse(BaseModel):
+    code: str = Field(description="Код для ссылки /s/{code}")
     story: str
-    paragraphs: list[str]
+    chapters: list[list[str]] = Field(description="Абзацы по главам")
     picks: list[PickOut]
+    can_continue: bool

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Icon from "./Icon";
+import KidSwitch from "./KidSwitch";
 
-export default function TopAppBar({ title, onBack, backLabel = "Назад" }) {
+export default function TopAppBar({ title, kidMode, onKidModeChange, children }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -11,16 +11,12 @@ export default function TopAppBar({ title, onBack, backLabel = "Назад" }) {
   }, []);
 
   return (
-    <header className={`md-top-app-bar${scrolled ? " md-top-app-bar--scrolled" : ""}`}>
-      <div className="md-top-app-bar__slot">
-        {onBack && (
-          <button type="button" className="md-icon-button md-state" onClick={onBack} aria-label={backLabel} title={backLabel}>
-            <Icon name="arrow_back" />
-          </button>
-        )}
+    <header className={`app-header${scrolled ? " app-header--scrolled" : ""}`}>
+      <div className="md-top-app-bar">
+        <p className="md-top-app-bar__title">{title}</p>
+        <KidSwitch checked={kidMode} onChange={onKidModeChange} />
       </div>
-      <p className="md-top-app-bar__title">{title}</p>
-      <div className="md-top-app-bar__slot" />
+      {children}
     </header>
   );
 }

@@ -37,6 +37,23 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
+.screen__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tab-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
 .screen--center h1 {
   margin: 0;
 }
@@ -183,6 +200,10 @@
   margin-left: -12px;
 }
 
+.pick__nav--end {
+  justify-content: flex-end;
+}
+
 .pick__nav {
   display: flex;
   justify-content: space-between;
@@ -215,6 +236,11 @@
   color: var(--app-paper-accent);
 }
 
+.story__ornament--divider {
+  width: 120px;
+  margin: 28px auto 24px;
+}
+
 .story__ornament--bottom {
   margin: 24px auto 0;
   transform: scaleY(-1);
@@ -241,6 +267,11 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
+}
+
+.story__actions--secondary {
+  align-items: center;
+  margin-top: -8px;
 }
 
 .story__picks {
@@ -299,4 +330,24 @@
   .story__dropcap {
     font-size: 2.8rem;
   }
+}
+
+/* ---------- «Чепуха» ---------- */
+.players {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.players__add {
+  margin: 8px 0 0 -12px;
+}
+
+.handoff__step {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.handoff h1 {
+  color: var(--md-sys-color-primary);
 }

@@ -1,161 +1,103 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { createStory, getMeta } from "./api";
-import SetupScreen from "./components/SetupScreen";
-import PickScreen from "./components/PickScreen";
+import { useCallback, useEffect, useState } from "react";
+import { getMeta } from "./api";
+import { codeFromLocation, setAddress } from "./share";
+import TopAppBar from "./components/TopAppBar";
+import Tabs from "./components/Tabs";
 import LoadingScreen from "./components/LoadingScreen";
 import ErrorScreen from "./components/ErrorScreen";
-import StoryPage from "./components/StoryPage";
-import TopAppBar from "./components/TopAppBar";
+import StoryTab from "./tabs/StoryTab";
+import ChepukhaTab from "./tabs/ChepukhaTab";
 
-const STAGE = {
-  LOADING_META: "loading-meta",
-  SETUP: "setup",
-  PICK: "pick",
-  GENERATING: "generating",
-  STORY: "story",
-  ERROR: "error",
-};
+const TABS = [
+  { id: "story", label: "Сказка" },
+  { id: "chepukha", label: "Чепуха" },
+];
+
+const KID_MODE_KEY = "papina-skazka:kid-mode";
+
+function readKidMode() {
+  try {
+    return window.localStorage.getItem(KID_MODE_KEY) !== "off"; // по умолчанию включён
+  } catch {
+    return true;
+  }
+}
 
 export default function App() {
-  const [stage, setStage] = useState(STAGE.LOADING_META);
   const [meta, setMeta] = useState(null);
-  const [error, setError] = useState({ message: "", answers: null }); // answers === null — ошибка загрузки копилки
+  const [metaError, setMetaError] = useState("");
+  const [tab, setTab] = useState("story");
+  const [kidMode, setKidMode] = useState(readKidMode);
+  const [snackbar, setSnackbar] = useState(null); // { text, id }
+  const [initialCode] = useState(codeFromLocation);
+  const [storyCode, setStoryCode] = useState(null);
 
-  // настройки сказки
-  const [themes, setThemes] = useState([]); // пусто = все темы
-  const [optionalSlots, setOptionalSlots] = useState(new Set()); // включённые необязательные части
-  // ручной выбор
-  const [pickIndex, setPickIndex] = useState(0);
-  const [answers, setAnswers] = useState({}); // slotId -> { text, label }
-
-  const [result, setResult] = useState(null);
-
-  const loadMeta = useCallback(async () => {
-    setStage(STAGE.LOADING_META);
-    try {
-      const data = await getMeta();
-      setMeta(data);
-      setOptionalSlots(new Set(data.slots.filter((s) => !s.required).map((s) => s.id)));
-      setStage(STAGE.SETUP);
-    } catch (err) {
-      setError({ message: `Не удалось загрузить копилку слов: ${err.message}.`, answers: null });
-      setStage(STAGE.ERROR);
-    }
+  const loadMeta = useCallback(() => {
+    setMetaError("");
+    getMeta()
+      .then(setMeta)
+      .catch((err) => setMetaError(`Не удалось загрузить копилку слов: ${err.message}.`));
   }, []);
 
   useEffect(() => {
     loadMeta();
   }, [loadMeta]);
 
-  // новый экран всегда открывается с начала страницы
+  // адрес страницы — ссылка на открытую сказку
   useEffect(() => {
+    setAddress(tab === "story" ? storyCode : null);
+  }, [tab, storyCode]);
+
+  useEffect(() => {
+    if (!snackbar) return undefined;
+    const timer = setTimeout(() => setSnackbar(null), 3000);
+    return () => clearTimeout(timer);
+  }, [snackbar]);
+
+  const notify = useCallback((text) => setSnackbar({ text, id: Date.now() }), []);
+
+  function changeKidMode(on) {
+    setKidMode(on);
+    try {
+      window.localStorage.setItem(KID_MODE_KEY, on ? "on" : "off");
+    } catch {
+      // хранилище недоступно — режим просто не запомнится
+    }
+    notify(on ? "Детский режим включён" : "Детский режим выключен, возможны шутки для взрослых");
+  }
+
+  function changeTab(id) {
+    setTab(id);
     window.scrollTo(0, 0);
-  }, [stage, pickIndex]);
-
-  const activeSlots = useMemo(
-    () => (meta ? meta.slots.filter((s) => s.required || optionalSlots.has(s.id)) : []),
-    [meta, optionalSlots]
-  );
-
-  const generate = useCallback(
-    async (manualAnswers = {}) => {
-      setStage(STAGE.GENERATING);
-      try {
-        const data = await createStory({
-          themes,
-          include: activeSlots.map((s) => s.id),
-          answers: manualAnswers,
-        });
-        setResult(data);
-        setStage(STAGE.STORY);
-      } catch (err) {
-        setError({ message: `Не удалось собрать сказку: ${err.message}.`, answers: manualAnswers });
-        setStage(STAGE.ERROR);
-      }
-    },
-    [themes, activeSlots]
-  );
-
-  function startPicking() {
-    setAnswers({});
-    setPickIndex(0);
-    setStage(STAGE.PICK);
   }
 
-  function finishPicking() {
-    const manual = Object.fromEntries(
-      Object.entries(answers).map(([slot, option]) => [slot, option.text])
-    );
-    generate(manual);
-  }
-
-  const goBackFromPick = () =>
-    pickIndex === 0 ? setStage(STAGE.SETUP) : setPickIndex(pickIndex - 1);
-
-  let screen;
-  let onBack = null;
-
-  if (stage === STAGE.LOADING_META || stage === STAGE.GENERATING) {
-    screen = <LoadingScreen />;
-  } else if (stage === STAGE.ERROR) {
-    screen = (
-      <ErrorScreen
-        message={error.message}
-        onRetry={() => (error.answers === null ? loadMeta() : generate(error.answers))}
-      />
-    );
-    if (meta) onBack = () => setStage(STAGE.SETUP);
-  } else if (stage === STAGE.PICK) {
-    const slot = activeSlots[pickIndex];
-    const isLast = pickIndex === activeSlots.length - 1;
-    onBack = goBackFromPick;
-    screen = (
-      <PickScreen
-        key={slot.id}
-        slot={slot}
-        themes={themes}
-        index={pickIndex + 1}
-        total={activeSlots.length}
-        selected={answers[slot.id] ?? null}
-        onSelect={(option) => setAnswers((a) => ({ ...a, [slot.id]: option }))}
-        onClear={() =>
-          setAnswers((a) => {
-            const { [slot.id]: _removed, ...rest } = a;
-            return rest;
-          })
-        }
-        onBack={goBackFromPick}
-        onNext={() => (isLast ? finishPicking() : setPickIndex(pickIndex + 1))}
-        isLast={isLast}
-      />
-    );
-  } else if (stage === STAGE.STORY) {
-    onBack = () => setStage(STAGE.SETUP);
-    screen = (
-      <StoryPage
-        result={result}
-        onAgain={() => generate({})}
-        onSettings={() => setStage(STAGE.SETUP)}
-      />
-    );
-  } else {
-    screen = (
-      <SetupScreen
-        meta={meta}
-        themes={themes}
-        onThemesChange={setThemes}
-        optionalSlots={optionalSlots}
-        onOptionalSlotsChange={setOptionalSlots}
-        onRandom={() => generate({})}
-        onPick={startPicking}
-      />
+  let content;
+  if (metaError) content = <ErrorScreen message={metaError} onRetry={loadMeta} />;
+  else if (!meta) content = <LoadingScreen />;
+  else {
+    content = (
+      <>
+        <div id="panel-story" role="tabpanel" aria-labelledby="tab-story" className="tab-panel" hidden={tab !== "story"}>
+          <StoryTab meta={meta} kid={kidMode} notify={notify} initialCode={initialCode} onCodeChange={setStoryCode} />
+        </div>
+        <div id="panel-chepukha" role="tabpanel" aria-labelledby="tab-chepukha" className="tab-panel" hidden={tab !== "chepukha"}>
+          <ChepukhaTab meta={meta} kid={kidMode} notify={notify} />
+        </div>
+      </>
     );
   }
 
   return (
     <>
-      <TopAppBar title="Папина сказка" onBack={onBack} />
-      <main className="app-main">{screen}</main>
+      <TopAppBar title="Папина сказка" kidMode={kidMode} onKidModeChange={changeKidMode}>
+        <Tabs tabs={TABS} active={tab} onChange={changeTab} />
+      </TopAppBar>
+      <main className="app-main">{content}</main>
+      {snackbar && (
+        <div key={snackbar.id} className="md-snackbar" role="status">
+          {snackbar.text}
+        </div>
+      )}
     </>
   );
 }
