@@ -119,7 +119,7 @@ movie | m | Тор
 movie | m | Капитан Америка
 movie | f | Чёрная Вдова
 movie | m | Росомаха
-movie | m | Дэдпул
+movie,adult | m | Дэдпул
 movie | f | Чудо-женщина
 movie,quest | m | Капитан Джек Воробей
 movie,quest | m | Д'Артаньян
@@ -131,12 +131,12 @@ movie | m | Шерлок Холмс
 movie | m | Доктор Ватсон
 movie,quest | m | Индиана Джонс
 movie | m | Джеймс Бонд
-movie,spooky | m | Терминатор Т-1000
+movie,spooky,adult | m | Терминатор Т-1000
 movie,space | m | Йода
 movie,space | m | Дарт Вейдер
 movie,space | m | Люк Скайуокер
 movie,space | m | Чубакка
-movie | m | Рэмбо
+movie,adult | m | Рэмбо
 movie | m | Майор Гром
 movie | m | Зорро
 movie | m | Робин Гуд

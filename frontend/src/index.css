@@ -14,11 +14,7 @@ body {
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse 120% 70% at 50% -10%, #223044 0%, transparent 60%),
-    radial-gradient(ellipse 90% 50% at 90% 110%, #2a1712 0%, transparent 55%),
-    var(--md-sys-color-surface);
-  background-attachment: fixed;
+  background: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface);
   font-family: var(--md-ref-typeface-plain);
   -webkit-font-smoothing: antialiased;

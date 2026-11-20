@@ -15,7 +15,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  animation: screen-in var(--md-sys-motion-duration-long) var(--md-sys-motion-easing-emphasized-decelerate);
+  animation: screen-in var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-emphasized-decelerate);
 }
 
 .screen--center {
@@ -23,11 +23,11 @@
   justify-content: center;
   gap: 16px;
   text-align: center;
-  padding-bottom: 96px;
+  padding-bottom: 64px;
 }
 
 @keyframes screen-in {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -37,18 +37,25 @@
   color: var(--md-sys-color-on-surface-variant);
 }
 
-.screen--center h1 {
-  margin: 0;
+.screen__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
 }
 
-.error-badge {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: var(--md-sys-shape-corner-large);
-  background: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
+.tab-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
+.screen--center h1 {
+  margin: 0;
 }
 
 .section-head {
@@ -101,18 +108,6 @@
   transition: background var(--md-sys-motion-duration-short) linear;
 }
 
-.theme-card__icon {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--md-sys-shape-corner-medium);
-  background: var(--md-sys-color-surface-container-highest);
-  color: var(--md-sys-color-primary);
-  transition: background var(--md-sys-motion-duration-short) linear;
-}
-
 .theme-card__text {
   display: flex;
   flex-direction: column;
@@ -133,11 +128,6 @@
   background: var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
   box-shadow: none;
-}
-
-.theme-card--selected .theme-card__icon {
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
 }
 
 .theme-card--selected .theme-card__desc {
@@ -210,8 +200,8 @@
   margin-left: -12px;
 }
 
-.pick__count {
-  color: var(--md-sys-color-on-surface-variant);
+.pick__nav--end {
+  justify-content: flex-end;
 }
 
 .pick__nav {
@@ -246,6 +236,11 @@
   color: var(--app-paper-accent);
 }
 
+.story__ornament--divider {
+  width: 120px;
+  margin: 28px auto 24px;
+}
+
 .story__ornament--bottom {
   margin: 24px auto 0;
   transform: scaleY(-1);
@@ -274,6 +269,11 @@
   gap: 8px;
 }
 
+.story__actions--secondary {
+  align-items: center;
+  margin-top: -8px;
+}
+
 .story__picks {
   width: 100%;
   max-width: 680px;
@@ -296,7 +296,7 @@
 
 .story__chevron {
   color: var(--md-sys-color-on-surface-variant);
-  transition: transform var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
+  transition: transform var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
 }
 
 .story__chevron--open {
@@ -330,4 +330,24 @@
   .story__dropcap {
     font-size: 2.8rem;
   }
+}
+
+/* ---------- «Чепуха» ---------- */
+.players {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.players__add {
+  margin: 8px 0 0 -12px;
+}
+
+.handoff__step {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.handoff h1 {
+  color: var(--md-sys-color-primary);
 }

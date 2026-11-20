@@ -68,9 +68,8 @@
   --md-sys-shape-corner-full: 9999px;
 
   /* ---- тени ---- */
-  --md-sys-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
-  --md-sys-elevation-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
-  --md-sys-elevation-3: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --md-sys-elevation-1: 0 1px 2px rgb(0 0 0 / 0.05);
+  --md-sys-elevation-3: 0 8px 24px rgb(0 0 0 / 0.06); /* только для «парящего»: лист сказки, снекбар */
 
   /* ---- прозрачность слоя состояний ---- */
   --md-sys-state-hover: 0.08;

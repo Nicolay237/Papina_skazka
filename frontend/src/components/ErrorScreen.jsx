@@ -1,17 +1,17 @@
-import Icon from "./Icon";
-
-export default function ErrorScreen({ message, onRetry }) {
+export default function ErrorScreen({ message, onRetry, retryLabel = "Попробовать снова", onCancel, cancelLabel }) {
   return (
     <section className="screen screen--center" role="alert">
-      <div className="error-badge">
-        <Icon name="error" />
+      <p className="md-body-large status-text">{message}</p>
+      <div className="screen__buttons">
+        <button type="button" className="md-button md-button--filled md-state" onClick={onRetry}>
+          {retryLabel}
+        </button>
+        {onCancel && (
+          <button type="button" className="md-button md-button--text md-state" onClick={onCancel}>
+            {cancelLabel}
+          </button>
+        )}
       </div>
-      <h1 className="md-headline-small">Сказка не сложилась</h1>
-      <p className="md-body-medium status-text">{message}</p>
-      <button type="button" className="md-button md-button--filled md-state" onClick={onRetry}>
-        <Icon name="refresh" />
-        Попробовать снова
-      </button>
     </section>
   );
 }
